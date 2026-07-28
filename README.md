@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Premium Real Estate Website
 
 A production-ready real estate property listing website built with Django. This website is designed for displaying properties and collecting enquiries - no booking or payment functionality.
@@ -203,3 +204,6 @@ gunicorn realestate.wsgi:application --bind 0.0.0.0:8000 --workers 4
 ## License
 
 This project is licensed under the MIT License.
+=======
+# real-estate-website
+>>>>>>> c1b6bb27549d30fdaba8f904a25aeffadde35e9b
