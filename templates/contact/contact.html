@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Page Header -->
+<section class="page-header py-5" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="text-white">Contact Us</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{% url 'core:home' %}" class="text-white-50">Home</a></li>
+                        <li class="breadcrumb-item active text-white" aria-current="page">Contact</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section py-5">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Contact Info -->
+            <div class="col-lg-4">
+                <div class="contact-info-wrapper">
+                    <h2 class="h3 mb-4">Get In Touch</h2>
+                    <div class="contact-info-item d-flex mb-4">
+                        <div class="icon-box me-3">
+                            <i class="fas fa-location-dot fa-2x text-primary"></i>
+                        </div>
+                        <div>
+                            <h5>Office Address</h5>
+                            <p class="text-muted mb-0">{{ CONTACT_ADDRESS }}</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-item d-flex mb-4">
+                        <div class="icon-box me-3">
+                            <i class="fas fa-phone fa-2x text-primary"></i>
+                        </div>
+                        <div>
+                            <h5>Phone Number</h5>
+                            <p class="text-muted mb-0"><a href="tel:{{ CONTACT_PHONE }}" class="text-decoration-none">{{ CONTACT_PHONE }}</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-info-item d-flex mb-4">
+                        <div class="icon-box me-3">
+                            <i class="fas fa-envelope fa-2x text-primary"></i>
+                        </div>
+                        <div>
+                            <h5>Email Address</h5>
+                            <p class="text-muted mb-0"><a href="mailto:{{ CONTACT_EMAIL }}" class="text-decoration-none">{{ CONTACT_EMAIL }}</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-lg-8">
+                <div class="contact-form-wrapper card shadow-sm border-0">
+                    <div class="card-body p-5">
+                        <h2 class="h3 mb-4">Send Us a Message</h2>
+                        <form method="POST" action="{% url 'contact:contact' %}">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Full Name *</label>
+                                    <input type="text" name="name" class="form-control" required maxlength="100" placeholder="Your Name">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email *</label>
+                                    <input type="email" name="email" class="form-control" required placeholder="Your Email">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" name="phone" class="form-control" placeholder="Your Phone" maxlength="20">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Subject</label>
+                                    <input type="text" name="subject" class="form-control" placeholder="Subject" maxlength="200">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Message *</label>
+                                    <textarea name="message" class="form-control" rows="5" required placeholder="Your Message..." maxlength="5000"></textarea>
+                                </div>
+                                <!-- Honeypot -->
+                                <div style="position: absolute; left: -9999px;">
+                                    <input type="text" name="website" tabindex="-1" autocomplete="off">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg mt-4">
+                                <i class="fas fa-paper-plane me-2"></i>Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Google Map -->
+<section class="map-section">
+    <div class="ratio ratio-21x9">
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.456!2d72.8777!3d19.0760!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDA0JzMzLjYiTiA3MsKwNTInMzkuNyJF!5e0!3m2!1sen!2sin!4v1"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Office Location">
+        </iframe>
+    </div>
+</section>
+
+{% endblock %}

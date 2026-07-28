@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+.dashboard-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 220px;
+    padding-top: 80px;
+    background: #0F172A;
+    z-index: 900;
+    overflow-y: auto;
+}
+.dashboard-sidebar .nav-link {
+    color: rgba(255,255,255,0.7) !important;
+    padding: 12px 20px !important;
+    border-radius: 10px;
+    margin: 2px 10px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+.dashboard-sidebar .nav-link:hover,
+.dashboard-sidebar .nav-link.active {
+    background: rgba(37,99,235,0.15) !important;
+    color: #fff !important;
+}
+.dashboard-main {
+    margin-left: 220px;
+    padding-top: 80px;
+    min-height: 100vh;
+}
+@media (max-width: 767px) {
+    .dashboard-sidebar { display: none; }
+    .dashboard-main { margin-left: 0; padding-top: 70px; }
+}
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Dashboard Sidebar -->
+        <nav class="dashboard-sidebar d-none d-md-block">
+                <ul class="nav flex-column pt-3">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+                           href="{% url 'dashboard:home' %}">
+                             <i class="fas fa-gauge-high me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'property' in request.resolver_match.url_name %}active{% endif %}"
+                           href="{% url 'dashboard:property_list' %}">
+                            <i class="fas fa-building me-2"></i>Properties
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'category' in request.resolver_match.url_name %}active{% endif %}"
+                           href="{% url 'dashboard:category_list' %}">
+                             <i class="fas fa-folder-tree me-2"></i>Categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'location' in request.resolver_match.url_name %}active{% endif %}"
+                           href="{% url 'dashboard:location_list' %}">
+                             <i class="fas fa-location-dot me-2"></i>Locations
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'enquiry' in request.resolver_match.url_name %}active{% endif %}"
+                           href="{% url 'dashboard:enquiry_list' %}">
+                            <i class="fas fa-envelope me-2"></i>Enquiries
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'site_settings' %}active{% endif %}"
+                           href="{% url 'dashboard:site_settings' %}">
+                             <i class="fas fa-gear me-2"></i>Site Settings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin:index' %}">
+                             <i class="fas fa-shield-halved me-2"></i>Admin Panel
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:home' %}">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Site
+                        </a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <form method="post" action="{% url 'dashboard:logout' %}">
+                            {% csrf_token %}
+                            <button class="nav-link text-danger border-0 bg-transparent w-100 text-start" type="submit">
+                                 <i class="fas fa-right-from-bracket me-2"></i>Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+        </nav>
+
+        <!-- Dashboard Main Content -->
+        <main role="main" class="dashboard-main px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">{% block dashboard_title %}Dashboard{% endblock %}</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    {% block dashboard_actions %}{% endblock %}
+                </div>
+            </div>
+            {% block dashboard_content %}{% endblock %}
+        </main>
+    </div>
+</div>
+{% endblock %}

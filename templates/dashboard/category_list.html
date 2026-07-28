@@ -1,0 +1,71 @@
+{% extends 'dashboard/base.html' %}
+
+{% block dashboard_title %}Property Categories{% endblock %}
+
+{% block dashboard_actions %}
+<a href="{% url 'dashboard:category_create' %}" class="btn btn-primary">
+    <i class="fas fa-plus me-1"></i>Add Category
+</a>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="card border-0 shadow-sm mb-3">
+    <div class="card-body py-2">
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <strong class="me-2">Quick Add:</strong>
+            <a href="{% url 'dashboard:category_create' %}" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-folder me-1"></i>Category
+            </a>
+            <a href="{% url 'dashboard:location_create' %}" class="btn btn-outline-success btn-sm">
+                <i class="fas fa-location-dot me-1"></i>Location
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Icon</th>
+                        <th>Description</th>
+                        <th>Properties</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr>
+                        <td><strong>{{ category.name }}</strong></td>
+                        <td><i class="{{ category.icon }}"></i> {{ category.icon }}</td>
+                        <td>{{ category.description|truncatechars:50|default:'-' }}</td>
+                        <td>{{ category.property_count }}</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'dashboard:category_edit' category.pk %}" class="btn btn-primary btn-sm">
+                                    Edit
+                                </a>
+                                <a href="{% url 'dashboard:category_delete' category.pk %}" class="btn btn-danger btn-sm">
+                                    Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-4">
+                            <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                            <p>No categories found.</p>
+                            <a href="{% url 'dashboard:category_create' %}" class="btn btn-primary">Add Your First Category</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

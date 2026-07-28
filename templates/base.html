@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- SEO Meta Tags -->
+    <title>{% block meta_title %}{{ meta_title|default:'Royal Trivandrum - Premium Real Estate in Trivandrum, Kerala' }}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{{ meta_description|default:'Royal Trivandrum - Your trusted real estate partner. Find premium villas, apartments, commercial properties, and plots across Trivandrum and Kerala.' }}{% endblock %}">
+    <meta name="keywords" content="real estate trivandrum, properties in kerala, villas in trivandrum, apartments trivandrum, commercial property kerala, land for sale trivandrum">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block og_title %}{{ meta_title|default:'Royal Trivandrum - Premium Real Estate' }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ meta_description|default:'Your trusted real estate partner in Trivandrum.' }}{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:site_name" content="Royal Trivandrum">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/og-default.jpg' %}{% endblock %}">
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ meta_title|default:'Royal Trivandrum' }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ meta_description|default:'Your trusted real estate partner in Trivandrum.' }}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{% static 'images/og-default.jpg' %}{% endblock %}">
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "RealEstateAgent",
+        "name": "Royal Trivandrum",
+        "url": "{{ request.build_absolute_uri }}",
+        "telephone": "+91 471 234 5678",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "MG Road, Statue Junction",
+            "addressLocality": "Thiruvananthapuram",
+            "addressRegion": "Kerala",
+            "postalCode": "695001",
+            "addressCountry": "IN"
+        }
+    }
+    </script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-weight='bold' fill='%232563EB'>R</text></svg>">
+
+    {% block extra_meta %}{% endblock %}
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- Google Fonts: Manrope -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Page Loader -->
+    <div class="page-loader" aria-hidden="true">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top" id="main-nav">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'core:home' %}">
+                Royal Trivandrum
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+                           href="{% url 'core:home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'property_list' %}active{% endif %}"
+                           href="{% url 'properties:property_list' %}">Properties</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
+                           href="{% url 'core:about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
+                           href="{% url 'contact:contact' %}">Contact</a>
+                    </li>
+                    {% if user.is_authenticated and user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard:home' %}">
+                            <i class="fas fa-gauge-high me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <a href="{% url 'properties:property_list' %}" class="btn btn-primary btn-sm rounded-pill px-4 nav-cta-btn">
+                    Browse Properties <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages / Toast Notifications -->
+    {% if messages %}
+    <div class="container pt-5 mt-5">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-widget">
+                        <h5>Royal Trivandrum</h5>
+                        <p class="mb-3" style="font-size: 0.9rem; line-height: 1.8;">{{ SITE_DESCRIPTION }}</p>
+                        <p style="font-size: 0.85rem; color: rgba(255,255,255,0.5);">{{ SITE_TAGLINE }}</p>
+                        <div class="footer-social">
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                            <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <div class="footer-widget">
+                        <h5>Quick Links</h5>
+                        <ul class="footer-links">
+                            <li><a href="{% url 'core:home' %}">Home</a></li>
+                            <li><a href="{% url 'properties:property_list' %}">Properties</a></li>
+                            <li><a href="{% url 'core:about' %}">About Us</a></li>
+                            <li><a href="{% url 'contact:contact' %}">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-widget">
+                        <h5>Property Types</h5>
+                        <ul class="footer-links">
+                            <li><a href="{% url 'properties:property_list' %}?property_type=villa">Luxury Villas</a></li>
+                            <li><a href="{% url 'properties:property_list' %}?property_type=apartment">Apartments</a></li>
+                            <li><a href="{% url 'properties:property_list' %}?property_type=house">Residential Houses</a></li>
+                            <li><a href="{% url 'properties:property_list' %}?property_type=commercial">Commercial</a></li>
+                            <li><a href="{% url 'properties:property_list' %}?property_type=land">Land & Plots</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-widget">
+                        <h5>Contact Info</h5>
+                        <ul class="footer-contact list-unstyled">
+                            <li><i class="fas fa-location-dot"></i> {{ CONTACT_ADDRESS }}</li>
+                            <li><i class="fas fa-phone"></i> <a href="tel:{{ CONTACT_PHONE }}">{{ CONTACT_PHONE }}</a></li>
+                            <li><i class="fas fa-envelope"></i> <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a></li>
+                        </ul>
+                        <div class="newsletter-form mt-4">
+                            <h5>Stay Updated</h5>
+                            <div class="input-group mt-2">
+                                <input type="email" class="form-control" placeholder="Your email" aria-label="Newsletter email">
+                                <button class="btn btn-primary" type="button"><i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p>&copy; {% now 'Y' %} Royal Trivandrum. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a href="#" class="text-white-50 text-decoration-none me-3">Privacy Policy</a>
+                        <a href="#" class="text-white-50 text-decoration-none">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Page Header -->
+<section class="page-header py-5" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="text-white">Properties</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{% url 'core:home' %}" class="text-white-50">Home</a></li>
+                        <li class="breadcrumb-item active text-white" aria-current="page">Properties</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Search & Filter Section -->
+<section class="filter-section py-4 bg-light">
+    <div class="container">
+        <form method="GET" action="{% url 'properties:property_list' %}" class="row g-3">
+            <div class="col-lg-3 col-md-6">
+                <input type="text" name="keyword" class="form-control" placeholder="Search..." value="{{ request.GET.keyword }}">
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <select name="location" class="form-select">
+                    <option value="">All Locations</option>
+                    {% for loc in locations %}
+                    <option value="{{ loc.pk }}" {% if request.GET.location == loc.pk|stringformat:'i' %}selected{% endif %}>{{ loc.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-4">
+                <select name="property_type" class="form-select">
+                    <option value="">All Types</option>
+                    {% for type_value, type_label in search_form.fields.property_type.choices %}
+                        {% if type_value %}
+                        <option value="{{ type_value }}" {% if request.GET.property_type == type_value %}selected{% endif %}>{{ type_label }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-4">
+                <select name="sort_by" class="form-select">
+                    <option value="newest" {% if request.GET.sort_by == 'newest' %}selected{% endif %}>Newest</option>
+                    <option value="price_low" {% if request.GET.sort_by == 'price_low' %}selected{% endif %}>Price Low</option>
+                    <option value="price_high" {% if request.GET.sort_by == 'price_high' %}selected{% endif %}>Price High</option>
+                </select>
+            </div>
+            <div class="col-lg-1 col-md-12">
+                <button type="submit" class="btn btn-primary w-100"><i class="fas fa-search"></i></button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Properties Grid -->
+<section class="properties-section py-5">
+    <div class="container">
+        {% if properties %}
+        <div class="row g-4">
+            {% for property in properties %}
+            <div class="col-lg-4 col-md-6">
+                <div class="property-card card border-0 shadow-sm h-100">
+                    <div class="property-image-wrapper">
+                        {% if property.cover_image %}
+                        <img src="{{ property.cover_image.url }}" class="card-img-top property-image"
+                             alt="{{ property.title }}" loading="lazy">
+                        {% else %}
+                        <div class="card-img-top property-image bg-secondary d-flex align-items-center justify-content-center">
+                            <i class="fas fa-building fa-4x text-white-50"></i>
+                        </div>
+                        {% endif %}
+                        <span class="badge-type">{{ property.get_property_type_display }}</span>
+                        {% if property.status == 'sold' %}
+                        <span class="badge-sold">Sold</span>
+                        {% elif property.status == 'rented' %}
+                        <span class="badge-rented">Rented</span>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ property.title|truncatechars:50 }}</h5>
+                        <p class="card-text text-muted small">
+                            <i class="fas fa-location-dot me-1"></i>{{ property.location }}
+                        </p>
+                        <div class="property-meta d-flex justify-content-between mb-3">
+                            <span><i class="fas fa-bed me-1"></i>{{ property.bedrooms }} Beds</span>
+                            <span><i class="fas fa-bath me-1"></i>{{ property.bathrooms }} Baths</span>
+                            <span><i class="fas fa-vector-square me-1"></i>{{ property.area|floatformat:0 }} sqft</span>
+                        </div>
+                        <p class="card-text small text-muted">{{ property.description|truncatechars:100 }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="property-price">{{ property.formatted_price }}</span>
+                            <a href="{% url 'properties:detail' property.slug %}" class="btn btn-primary btn-sm">
+                                View Details <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav aria-label="Page navigation" class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if request.GET.keyword %}&keyword={{ request.GET.keyword }}{% endif %}{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}{% if request.GET.bedrooms %}&bedrooms={{ request.GET.bedrooms }}{% endif %}{% if request.GET.sort_by %}&sort_by={{ request.GET.sort_by }}{% endif %}">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.keyword %}&keyword={{ request.GET.keyword }}{% endif %}{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}{% if request.GET.bedrooms %}&bedrooms={{ request.GET.bedrooms }}{% endif %}{% if request.GET.sort_by %}&sort_by={{ request.GET.sort_by }}{% endif %}">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if request.GET.keyword %}&keyword={{ request.GET.keyword }}{% endif %}{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}{% if request.GET.bedrooms %}&bedrooms={{ request.GET.bedrooms }}{% endif %}{% if request.GET.sort_by %}&sort_by={{ request.GET.sort_by }}{% endif %}">{{ num }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.keyword %}&keyword={{ request.GET.keyword }}{% endif %}{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}{% if request.GET.bedrooms %}&bedrooms={{ request.GET.bedrooms }}{% endif %}{% if request.GET.sort_by %}&sort_by={{ request.GET.sort_by }}{% endif %}">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.keyword %}&keyword={{ request.GET.keyword }}{% endif %}{% if request.GET.location %}&location={{ request.GET.location }}{% endif %}{% if request.GET.property_type %}&property_type={{ request.GET.property_type }}{% endif %}{% if request.GET.bedrooms %}&bedrooms={{ request.GET.bedrooms }}{% endif %}{% if request.GET.sort_by %}&sort_by={{ request.GET.sort_by }}{% endif %}">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-search fa-4x text-muted mb-3"></i>
+            <h3>No Properties Found</h3>
+            <p class="text-muted">Try adjusting your search criteria or browse all properties.</p>
+            <a href="{% url 'properties:property_list' %}" class="btn btn-primary">View All Properties</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

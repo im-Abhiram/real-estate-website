@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Page Header -->
+<section class="page-header py-5" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="text-white">About Us</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{% url 'core:home' %}" class="text-white-50">Home</a></li>
+                        <li class="breadcrumb-item active text-white" aria-current="page">About</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Company Info -->
+<section class="about-content py-5">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <h2 class="section-title mb-4">{{ site_settings.about_story_title|default:'Our Story' }}</h2>
+                <p class="lead">{{ site_settings.about_story_content|default:'Premium Real Estate has been at the forefront of the real estate industry, delivering exceptional properties and unmatched service to our clients.'|linebreaksbr }}</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-image-placeholder rounded p-5 bg-light text-center">
+                    <i class="fas fa-building fa-8x text-primary opacity-25"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mission & Vision -->
+<section class="mission-vision py-5 bg-light">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-5 text-center">
+                        <i class="fas fa-bullseye fa-3x text-primary mb-3"></i>
+                        <h3>{{ site_settings.about_mission_title|default:'Our Mission' }}</h3>
+                        <p class="text-muted">{{ site_settings.about_mission_content|default:'To provide exceptional real estate services with integrity, transparency, and professionalism.'|linebreaksbr }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-5 text-center">
+                        <i class="fas fa-eye fa-3x text-primary mb-3"></i>
+                        <h3>{{ site_settings.about_vision_title|default:'Our Vision' }}</h3>
+                        <p class="text-muted">{{ site_settings.about_vision_content|default:'To be the most trusted and innovative real estate company, setting new standards in property services and creating lasting value for our clients and communities.'|linebreaksbr }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

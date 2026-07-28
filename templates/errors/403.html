@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="error-section py-5 min-vh-75 d-flex align-items-center">
+    <div class="container text-center">
+        <i class="fas fa-lock fa-5x text-danger mb-4"></i>
+        <h1 class="display-1 fw-bold text-primary">403</h1>
+        <h2 class="mb-3">Access Forbidden</h2>
+        <p class="lead text-muted mb-4">You don't have permission to access this resource. Please contact the administrator if you believe this is an error.</p>
+        <a href="{% url 'core:home' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-home me-2"></i>Back to Home
+        </a>
+    </div>
+</section>
+{% endblock %}

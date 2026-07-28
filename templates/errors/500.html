@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="error-section py-5 min-vh-75 d-flex align-items-center">
+    <div class="container text-center">
+        <i class="fas fa-gears fa-5x text-danger mb-4"></i>
+        <h1 class="display-1 fw-bold text-primary">500</h1>
+        <h2 class="mb-3">Server Error</h2>
+        <p class="lead text-muted mb-4">Something went wrong on our end. Please try again later or contact our support team.</p>
+        <a href="{% url 'core:home' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-home me-2"></i>Back to Home
+        </a>
+    </div>
+</section>
+{% endblock %}
